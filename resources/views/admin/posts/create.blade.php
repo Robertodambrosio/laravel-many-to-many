@@ -40,6 +40,15 @@
                             @enderror
                         </div>
                         <div class="form-group form-check">
+                            <p>Tags:</p>
+                            @foreach ($tags as $tag)
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="tags[]" value="{{$tag->id}}">
+                                <label class="form-check-label" for="{{$tag->slug}}">{{$tag->name}}</label>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="published">
                             <label class="form-check-label" for="published">Pubblica</label>
                         </div>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -30,8 +31,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -45,32 +47,32 @@ class PostController extends Controller
     {
         // $data = $request->all();
 
-        $request-> validate([
-            'title'=> 'required|string|max:100',
-            'content'=> 'required',
-            'published'=> 'sometimes|accepted',
-            'category_id'=>'nullable|exists:categories,id'
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'content' => 'required',
+            'published' => 'sometimes|accepted',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
 
         $data = $request->all();
 
         $newPost = new Post();
         $newPost->title = $data['title'];
-        $newPost->content= $data['content'];
+        $newPost->content = $data['content'];
         $newPost->category_id = $data['category_id'];
 
         if (isset($data['published'])) {
             $newPost->published = true;
         }
 
-        $slug= Str::of($newPost->title)->slug('-');
+        $slug = Str::of($newPost->title)->slug('-');
         $count = 1;
 
-        while(Post::where('slug', $slug)->first()) {
+        while (Post::where('slug', $slug)->first()) {
             $slug = Str::of($newPost->title)->slug('-') . "-($count)";
             $count++;
         }
-        
+
         $newPost->slug = $slug;
 
         $newPost->save();
@@ -123,8 +125,8 @@ class PostController extends Controller
 
         $data = $request->all();
 
-       if($post->title != $data['title']) {
-           $post->title = $data['title'];
+        if ($post->title != $data['title']) {
+            $post->title = $data['title'];
 
             $slug = Str::of($post->title)->slug('-');
             $count = 1;
@@ -135,7 +137,7 @@ class PostController extends Controller
             }
 
             $post->slug = $slug;
-       }
+        }
         $post->content = $data['content'];
         $post->published = isset($data['published']);
         $post->category_id = $data['category_id'];
@@ -156,7 +158,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post -> delete();
+        $post->delete();
 
         return redirect()->route('posts.index');
     }
