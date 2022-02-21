@@ -43,10 +43,13 @@
                             <p>Tags:</p>
                             @foreach ($tags as $tag)
                                 <div class="form-check form-check-inline">
-                                    <input type="checkbox" class="form-check-input" name="tags[]" value="{{$tag->id}}">
+                                    <input type="checkbox" class="form-check-input" @error ('tags') is-invalid @enderror name="tags[]" value="{{$tag->id}}" id="{{$tag->slug}}">
                                 <label class="form-check-label" for="{{$tag->slug}}">{{$tag->name}}</label>
                             </div>
                             @endforeach
+                            @error('tags')
+                            <div class="alert alert-danger mt-3">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="published">

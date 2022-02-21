@@ -51,7 +51,8 @@ class PostController extends Controller
             'title' => 'required|string|max:100',
             'content' => 'required',
             'published' => 'sometimes|accepted',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|exists:tags,id',
         ]);
 
         $data = $request->all();
@@ -121,6 +122,7 @@ class PostController extends Controller
             'content' => 'required',
             'published' => 'sometimes|accepted',
             'category_id' => 'nullable|exists:categories,id'
+            
         ]);
 
         $data = $request->all();
